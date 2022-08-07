@@ -28,7 +28,8 @@ public class CourseMaterial {
 
     @OneToOne(
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            optional = false //forcing to add fk , without fk can't create
     )
     @JoinColumn(
             name = "course_id",  // new column in table course material
