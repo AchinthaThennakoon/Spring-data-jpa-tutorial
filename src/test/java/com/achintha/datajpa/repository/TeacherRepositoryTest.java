@@ -31,7 +31,6 @@ class TeacherRepositoryTest {
         Teacher teacher= Teacher.builder()
                 .firstName("Jhon")
                 .LastName("keels")
-                .courses(List.of(course1,course2))
                 .build();
 
         teacherRepository.save(teacher);
