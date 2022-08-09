@@ -5,10 +5,12 @@ import com.achintha.datajpa.entity.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CourseRepositoryTest {
@@ -30,12 +32,34 @@ class CourseRepositoryTest {
                 .build();
 
         Course course= Course.builder()
-                .title("AI")
+                .title("AI2")
                 .credit(4)
                 .teacher(teacher)
                 .build();
 
         courseRepository.save(course);
+    }
+
+    @Test
+    @Transactional
+    public void findPagination(){
+        //define pageable objects
+        Pageable firstPageWithThree =
+                PageRequest.of(0,3);
+        Pageable secondPageWithTwo =
+                PageRequest.of(1,2);
+
+        List<Course> courses =
+                courseRepository
+                        .findAll(secondPageWithTwo)
+                        .getContent();
+
+        long totalPages = courseRepository
+                .findAll(secondPageWithTwo)
+                        .getTotalPages();
+
+        System.out.println("Total pages :"+totalPages);
+        System.out.println("records :"+courses);
     }
 
 }
