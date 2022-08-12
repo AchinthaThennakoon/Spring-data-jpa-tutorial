@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -58,8 +59,59 @@ class CourseRepositoryTest {
                 .findAll(secondPageWithTwo)
                         .getTotalPages();
 
+        long totalElements = courseRepository
+                .findAll(secondPageWithTwo)
+                .getTotalElements();
+
         System.out.println("Total pages :"+totalPages);
         System.out.println("records :"+courses);
     }
+
+    @Test
+    @Transactional
+    public void findAllWithSorting(){
+        Pageable sortByTile =
+                PageRequest.of(0,
+                        2,
+                        Sort.by("title")
+                );
+
+        Pageable sortByCreditDesc =
+                PageRequest.of(0,
+                        2,
+                        Sort.by("credit").descending()
+                );
+
+        Pageable sortByTileAndCreditDesc =
+                PageRequest.of(0,
+                        4,
+                        Sort.by("title")
+                                .and(Sort.by("credit").descending())
+                );
+
+        List<Course> courses = courseRepository
+                .findAll(sortByTileAndCreditDesc)
+                .getContent();
+
+        System.out.println(courses);
+    }
+
+    //test custom sorting
+    @Test
+    @Transactional
+    public void printFindByTitleContaining(){
+        Pageable firstPageTenRecords =
+                PageRequest.of(0,10);
+
+        List<Course> courses=
+                courseRepository.findByTitleContaining(
+                        "D",
+                        firstPageTenRecords
+                ).getContent();
+
+        System.out.println("Courses :"+ courses);
+    }
+
+
 
 }
