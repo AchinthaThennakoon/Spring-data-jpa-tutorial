@@ -1,6 +1,7 @@
 package com.achintha.datajpa.repository;
 
 import com.achintha.datajpa.entity.Course;
+import com.achintha.datajpa.entity.Student;
 import com.achintha.datajpa.entity.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +113,28 @@ class CourseRepositoryTest {
         System.out.println("Courses :"+ courses);
     }
 
+    @Test
+    public void saveCourseWithStudentAndTeacher(){
+        Teacher teacher = Teacher.builder()
+                .firstName("nimal")
+                .LastName("Perera")
+                .build();
 
+        Student student =Student.builder()
+                .firstName("jhonny")
+                .lastName("depp")
+                .email("test123@gmail.com")
+                .build();
+
+        Course course = Course.builder()
+                .teacher(teacher)
+                .credit(2)
+                .title("CM")
+                .build();
+
+        course.addStudents(student);
+
+        courseRepository.save(course);
+    }
 
 }
